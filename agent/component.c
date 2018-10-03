@@ -124,6 +124,7 @@ socket_source_attach (SocketSource *socket_source, GMainContext *context)
 static void
 socket_source_detach (SocketSource *source)
 {
+
   nice_debug ("Detaching source %p (socket %p, FD %d) from context %p",
       source->source, source->socket,
       (source->socket->fileno != NULL) ?
@@ -625,7 +626,6 @@ nice_component_detach_socket (NiceComponent *component, NiceSocket *nicesock)
   component->socket_sources = g_slist_delete_link (component->socket_sources, l);
   component->socket_sources_age++;
 
-  socket_source_detach (socket_source);
   socket_source_free (socket_source);
 }
 

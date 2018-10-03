@@ -277,6 +277,7 @@ void
 nice_socket_free (NiceSocket *sock)
 {
   if (sock) {
+    socket_remove_from_hash(sock);
     sock->close (sock);
     g_slice_free (NiceSocket,sock);
   }

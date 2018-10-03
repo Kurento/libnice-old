@@ -73,8 +73,10 @@ typedef void (*NiceSocketWritableCb) (NiceSocket *sock, gpointer user_data);
 struct _NiceSocket
 {
   NiceAddress addr;
+  NiceAddress* key;
   NiceSocketType type;
   GSocket *fileno;
+  NiceSocket* server_sock;
   /* Implementations must handle any value of n_recv_messages, including 0. Iff
    * n_recv_messages is 0, recv_messages may be NULL. */
   gint (*recv_messages) (NiceSocket *sock,

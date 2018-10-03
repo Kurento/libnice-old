@@ -176,6 +176,7 @@ nice_tcp_passive_socket_new (GMainContext *ctx, NiceAddress *addr)
   return sock;
 }
 
+
 static void
 socket_close (NiceSocket *sock)
 {
@@ -309,13 +310,25 @@ nice_tcp_passive_socket_accept (NiceSocket *sock)
 
   if (new_socket) {
     NiceAddress *key = nice_address_dup (&remote_addr);
-
+     new_socket->key = key;
+     new_socket->server_sock = sock;
     nice_socket_set_writable_callback (new_socket, _child_writable_cb, sock);
     g_hash_table_insert (priv->connections, key, new_socket);
   }
   return new_socket;
 }
 
+void socket_remove_from_hash(NiceSocket* sock)
+{
+  TcpPassivePriv* server_priv;
+  if((sock->server_sock != NULL))
+  {
+   server_priv = sock->server_sock->priv;
+   if(server_priv)
+   g_hash_table_remove(server_priv->connections,sock->key);
+  }
+
+}
 static guint nice_address_hash (const NiceAddress * key)
 {
   gchar ip[INET6_ADDRSTRLEN];
